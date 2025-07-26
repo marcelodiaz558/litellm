@@ -230,6 +230,7 @@ class ContextCachingEndpoints(VertexBase):
             # included in the GenerateContent request (they're already in the cached content)
             optional_params.pop("tools", None)
             optional_params.pop("tool_config", None)
+            optional_params.pop("tool_choice", None)
             return messages, optional_params, cached_content
 
         cached_messages, non_cached_messages = separate_cached_messages(
@@ -241,6 +242,7 @@ class ContextCachingEndpoints(VertexBase):
 
         tools = optional_params.pop("tools", None)
         tool_config = optional_params.pop("tool_config", None)
+        tool_choice = optional_params.pop("tool_choice", None)
 
         ## AUTHORIZATION ##
         token, url = self._get_token_and_url_context_caching(
@@ -291,8 +293,8 @@ class ContextCachingEndpoints(VertexBase):
 
         if tools is not None:
             cached_content_request_body["tools"] = tools
-        if tool_config is not None:
-            cached_content_request_body["tool_config"] = tool_config
+        if tool_config is not None or tool_choice is not None:
+            cached_content_request_body["tool_config"] = tool_config or tool_choice
 
         ## LOGGING
         logging_obj.pre_call(
@@ -354,6 +356,7 @@ class ContextCachingEndpoints(VertexBase):
             # included in the GenerateContent request (they're already in the cached content)
             optional_params.pop("tools", None)
             optional_params.pop("tool_config", None)
+            optional_params.pop("tool_choice", None)
             return messages, optional_params, cached_content
 
         cached_messages, non_cached_messages = separate_cached_messages(
@@ -365,6 +368,7 @@ class ContextCachingEndpoints(VertexBase):
 
         tools = optional_params.pop("tools", None)
         tool_config = optional_params.pop("tool_config", None)
+        tool_choice = optional_params.pop("tool_choice", None)
 
         ## AUTHORIZATION ##
         token, url = self._get_token_and_url_context_caching(
@@ -413,8 +417,8 @@ class ContextCachingEndpoints(VertexBase):
 
         if tools is not None:
             cached_content_request_body["tools"] = tools
-        if tool_config is not None:
-            cached_content_request_body["tool_config"] = tool_config
+        if tool_config is not None or tool_choice is not None:
+            cached_content_request_body["tool_config"] = tool_config or tool_choice
 
         ## LOGGING
         logging_obj.pre_call(
