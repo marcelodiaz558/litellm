@@ -226,6 +226,10 @@ class ContextCachingEndpoints(VertexBase):
         Follows - https://ai.google.dev/api/caching#request-body
         """
         if cached_content is not None:
+            # When using cached content, remove tools and other parameters that should not be 
+            # included in the GenerateContent request (they're already in the cached content)
+            optional_params.pop("tools", None)
+            optional_params.pop("tool_config", None)
             return messages, optional_params, cached_content
 
         cached_messages, non_cached_messages = separate_cached_messages(
@@ -236,6 +240,7 @@ class ContextCachingEndpoints(VertexBase):
             return messages, optional_params, None
 
         tools = optional_params.pop("tools", None)
+        tool_config = optional_params.pop("tool_config", None)
 
         ## AUTHORIZATION ##
         token, url = self._get_token_and_url_context_caching(
@@ -284,7 +289,10 @@ class ContextCachingEndpoints(VertexBase):
             )
         )
 
-        cached_content_request_body["tools"] = tools
+        if tools is not None:
+            cached_content_request_body["tools"] = tools
+        if tool_config is not None:
+            cached_content_request_body["tool_config"] = tool_config
 
         ## LOGGING
         logging_obj.pre_call(
@@ -342,6 +350,10 @@ class ContextCachingEndpoints(VertexBase):
         Follows - https://ai.google.dev/api/caching#request-body
         """
         if cached_content is not None:
+            # When using cached content, remove tools and other parameters that should not be 
+            # included in the GenerateContent request (they're already in the cached content)
+            optional_params.pop("tools", None)
+            optional_params.pop("tool_config", None)
             return messages, optional_params, cached_content
 
         cached_messages, non_cached_messages = separate_cached_messages(
@@ -352,6 +364,7 @@ class ContextCachingEndpoints(VertexBase):
             return messages, optional_params, None
 
         tools = optional_params.pop("tools", None)
+        tool_config = optional_params.pop("tool_config", None)
 
         ## AUTHORIZATION ##
         token, url = self._get_token_and_url_context_caching(
@@ -398,7 +411,10 @@ class ContextCachingEndpoints(VertexBase):
             )
         )
 
-        cached_content_request_body["tools"] = tools
+        if tools is not None:
+            cached_content_request_body["tools"] = tools
+        if tool_config is not None:
+            cached_content_request_body["tool_config"] = tool_config
 
         ## LOGGING
         logging_obj.pre_call(
